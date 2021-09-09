@@ -1,0 +1,9 @@
+.group{
+    background-color: lightgrey;
+    border-radius: 10px;
+    height: 40px;
+    padding-top: 8px;
+    padding: 8x;
+    font-family: Cursive;
+    display: inline-block;
+}
