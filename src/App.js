@@ -1,7 +1,5 @@
 import './App.css';
-import Nav from 'react-bootstrap/Nav';
 import Spinner from 'react-bootstrap/Spinner';
-import Table from 'react-bootstrap/Table';
 import getRates from './getRates';
 import { useEffect, useState } from 'react';
 import ControlledTabs from './components/ControlledTabs';
@@ -17,11 +15,12 @@ function App() {
 
     for (let i = 0; i < currencies.length; i++) {
       for (let j = 0; j < currencies.length; j++) {
-        let rates = await getRates(currencies[i], currencies[j]);
+        const initialRates = await getRates(currencies[i], currencies[j]);
 
         if (i === j) {
           continue;
         }
+
         if (!currenciesObj.hasOwnProperty(currencies[i])) {
           currenciesObj[currencies[i]] = {
             less: [],
@@ -29,12 +28,16 @@ function App() {
             more: []
           };
         }
-        if (Object.entries(rates)[1][1] < 1) {
-          currenciesObj[currencies[i]].less.push(Object.entries(rates)[1]);
-        } else if (Object.entries(rates)[1][1] >= 1 && Object.entries(rates)[1][1] < 1.5) {
-          currenciesObj[currencies[i]].equal.push(Object.entries(rates)[1]);
-        } else {
-          currenciesObj[currencies[i]].more.push(Object.entries(rates)[1]);
+        for (let k = 0; k < initialRates.length; k++) {
+          const rates = initialRates[k];
+
+          if (Object.entries(rates)[0][1] < 1) {
+            currenciesObj[currencies[i]].less.push(rates);
+          } else if (Object.entries(rates)[0][1] >= 1 && Object.entries(rates)[0][1] < 1.5) {
+            currenciesObj[currencies[i]].equal.push(rates);
+          } else {
+            currenciesObj[currencies[i]].more.push(rates);
+          }
         }
       }
     }
@@ -54,7 +57,7 @@ function App() {
   }
 
   return (
-      <ControlledTabs currencies={currentCurrencies} />
+    <ControlledTabs currencies={currentCurrencies} />
   );
 }
 
