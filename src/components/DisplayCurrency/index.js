@@ -1,23 +1,11 @@
 import { useEffect, useState } from 'react';
 import styles from './index.module.css';
 
-const DisplayCurrency = ({ currencyToDisplay, keyValue, currency, setCounter }) => {
+const DisplayCurrency = ({ currencyToDisplay, clickedCurrency, currencyAndItsValues, setCounter }) => {
     const [arrayOfAllCombinedValues, setArrayOfAllCombinedValues] = useState([]);
 
     useEffect(() => {
-        const combineAllValues = (value) => {
-            for (let i = 0; i < Object.entries(Object.entries(currency)[1][1][value]).length; i++) {
-                let v = (Object.entries(Object.entries(currency)[1][1][value][i])[0][1]).toFixed(1);
-
-                if (arrayOfAllCombinedValues.includes(v)) {
-                    break;
-                }
-                setArrayOfAllCombinedValues(arrayOfAllCombinedValues => arrayOfAllCombinedValues.concat(v));
-
-            }
-        }
-
-        if (currency[0] === keyValue) {
+        if (currencyAndItsValues[0] === clickedCurrency) {
             const values = ['equal', 'less', 'more'];
 
             for (let i = 0; i < values.length; i++) {
@@ -26,12 +14,18 @@ const DisplayCurrency = ({ currencyToDisplay, keyValue, currency, setCounter }) 
                 arrayOfAllCombinedValues.sort((a, b) => b - a);
             }
         }
-        let unique = [...new Set(arrayOfAllCombinedValues)];
 
-        if (unique.length > 0) {
+        getLengthOfLongestArray(arrayOfAllCombinedValues);
+
+    }, [arrayOfAllCombinedValues, clickedCurrency]);
+
+    const getLengthOfLongestArray = () => {
+        let uniqueArray = [...new Set(arrayOfAllCombinedValues)];
+
+        if (uniqueArray.length > 0) {
             let counter = 0;
-            for (let i = 0; i < unique.length - 1; i++) {
-                const diff = Number((unique[i] - unique[i + 1]).toFixed(1));
+            for (let i = 0; i < uniqueArray.length - 1; i++) {
+                const diff = Number((uniqueArray[i] - uniqueArray[i + 1]).toFixed(1));
 
                 if (diff > 0.5) {
                     counter = 0;
@@ -41,15 +35,28 @@ const DisplayCurrency = ({ currencyToDisplay, keyValue, currency, setCounter }) 
             }
             setCounter(counter);
         }
-    }, [arrayOfAllCombinedValues, keyValue]);
+    }
+
+    const combineAllValues = (value) => {
+        const currencies = Object.entries(Object.entries(currencyAndItsValues)[1][1][value]);
+
+        for (let i = 0; i < currencies.length; i++) {
+
+            let fixedValue = (Object.entries(Object.entries(currencyAndItsValues)[1][1][value][i])[0][1]).toFixed(1);
+
+            if (arrayOfAllCombinedValues.includes(fixedValue)) {
+                break;
+            }
+            setArrayOfAllCombinedValues(arrayOfAllCombinedValues => arrayOfAllCombinedValues.concat(fixedValue));
+        }
+    }
 
     return (
-        <div>
-            <br />
-            {currencyToDisplay[1].map((element, i) => {
-                element = Object.entries(element);
+        <div className={styles['single-currency']}>
+            {currencyToDisplay[1].map((currencyAndItsValue, i) => {
+                currencyAndItsValue = Object.entries(currencyAndItsValue);
 
-                return <div key={i}>{element[0][0]}: {element[0][1]}</div>
+                return <div key={i}>{currencyAndItsValue[0][0]}: {currencyAndItsValue[0][1]}</div>
             })}
             <div>Count: {currencyToDisplay[1].length}</div>
         </div>

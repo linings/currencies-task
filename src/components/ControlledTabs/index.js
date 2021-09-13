@@ -9,6 +9,10 @@ function ControlledTabs(currentCurrencies) {
     const [key, setKey] = useState('usd');
     const [counter, setCounter] = useState(0);
 
+    useEffect(() =>{
+        
+    },[counter]);
+
     return (
         <>
             <Tabs
@@ -22,8 +26,8 @@ function ControlledTabs(currentCurrencies) {
                         <div>{Object.entries(currency[1]).map((currencyToDisplay, i) => {
                             return <DisplayCurrency
                                 key={i}
-                                keyValue={key}
-                                currency={currency}
+                                clickedCurrency={key}
+                                currencyAndItsValues={currency}
                                 currencyToDisplay={currencyToDisplay}
                                 setCounter={setCounter}
                             />
@@ -32,7 +36,8 @@ function ControlledTabs(currentCurrencies) {
                 })}
             </Tabs>
             <br/>
-            <div>Lenth of longest Array: {counter}</div>
+            {console.log(counter)}
+            <div className={styles['single-currency']}>Lenth of longest Array: {counter}</div>
         </>
     );
 }

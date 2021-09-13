@@ -7,3 +7,13 @@
     font-family: Cursive;
     display: inline-block;
 }
+.single-currency{
+    font-family: cursive;
+    font-size: 16px;
+    margin: 10px 20px;
+    padding: 10px;
+    color: #455577;
+    border: 1px solid cadetblue;
+    border-radius: 15px;
+    display: inline-block;
+}

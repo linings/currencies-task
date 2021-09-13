@@ -11,7 +11,7 @@ function App() {
   const currencies = ['usd', 'eur', 'aud', 'cad', 'chf', 'nzd', 'bgn'];
 
   const getCurrentCurrencies = async () => {
-    let currenciesObj = {};
+    let allCurrenciesAndTheirValuesObj = {};
 
     for (let i = 0; i < currencies.length; i++) {
       for (let j = 0; j < currencies.length; j++) {
@@ -21,27 +21,29 @@ function App() {
           continue;
         }
 
-        if (!currenciesObj.hasOwnProperty(currencies[i])) {
-          currenciesObj[currencies[i]] = {
+        if (!allCurrenciesAndTheirValuesObj.hasOwnProperty(currencies[i])) {
+          allCurrenciesAndTheirValuesObj[currencies[i]] = {
             less: [],
             equal: [],
             more: []
           };
         }
         for (let k = 0; k < initialRates.length; k++) {
-          const rates = initialRates[k];
+          const currencyAndItsRate = initialRates[k];
+          const currencyCurrentAmount = Object.entries(currencyAndItsRate)[0][1];
+          const currencyCurrentType = currencies[i];
 
-          if (Object.entries(rates)[0][1] < 1) {
-            currenciesObj[currencies[i]].less.push(rates);
-          } else if (Object.entries(rates)[0][1] >= 1 && Object.entries(rates)[0][1] < 1.5) {
-            currenciesObj[currencies[i]].equal.push(rates);
+          if (currencyCurrentAmount < 1) {
+            allCurrenciesAndTheirValuesObj[currencyCurrentType].less.push(currencyAndItsRate);
+          } else if (currencyCurrentAmount >= 1 && currencyCurrentAmount < 1.5) {
+            allCurrenciesAndTheirValuesObj[currencyCurrentType].equal.push(currencyAndItsRate);
           } else {
-            currenciesObj[currencies[i]].more.push(rates);
+            allCurrenciesAndTheirValuesObj[currencyCurrentType].more.push(currencyAndItsRate);
           }
         }
       }
     }
-    setCurrentCurrencies(currentCurrencies => Object.assign(currentCurrencies, currenciesObj));
+    setCurrentCurrencies(currentCurrencies => Object.assign(currentCurrencies, allCurrenciesAndTheirValuesObj));
 
     if (Object.entries(currentCurrencies).length !== 0) {
       setLoading(false);
