@@ -1,12 +1,3 @@
-// export default async (currency1, currency2) => {
-//     let promise = await fetch(`https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/${currency1}/${currency2}.json`, {
-//         method: 'GET',
-//     });
-//     let response = await promise.json();
-//     let result = await response;
-
-//     return result;
-// }
 export default (currency1, currency2) => {
     let currArray = Promise.all([
         fetch(`https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/${currency1}/${currency2}.json`, {
@@ -20,7 +11,7 @@ export default (currency1, currency2) => {
         .then(([currency, oppositeCurrency]) => {
             let keyCurrency = {};
             let oppositeKeyCurrency = {};
-            
+
             keyCurrency[`${currency1}-${currency2}`] = currency[`${currency2}`];
             oppositeKeyCurrency[`${currency2}-${currency1}`] = oppositeCurrency[`${currency1}`];
 
